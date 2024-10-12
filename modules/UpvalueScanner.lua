@@ -25,7 +25,7 @@ local function compareUpvalue(query, upvalue, ignore)
 
         return toString(upvalue) == query
     elseif upvalueType == "function" then
-        local closureName = getInfo(upvalue).name or ''
+        local closureName = debug.getinfo(upvalue).name or ''
         return query == closureName or closureName:lower():find(query:lower())
     end
 
@@ -35,9 +35,9 @@ end
 local function scan(query, deepSearch)
     local upvalues = {}
 
-    for _i, closure in pairs(getGc()) do
-        if type(closure) == "function" and not isXClosure(closure) and not upvalues[closure] then
-            for index, value in pairs(getUpvalues(closure)) do
+    for _i, closure in pairs(getgc()) do
+        if type(closure) == "function" and not isexecutorclosure(closure) and not upvalues[closure] then
+            for index, value in pairs(debug.getupvalues(closure)) do
                 local valueType = type(value)
 
                 if valueType ~= "table" and compareUpvalue(query, value) then

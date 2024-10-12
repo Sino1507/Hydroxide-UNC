@@ -16,10 +16,10 @@ local function compareConstant(query, constant)
 
     local stringCheck = constantType == "string" and (query == constant or constant:lower():find(query:lower()))
     local numberCheck = constantType == "number" and (tonumber(query) == constant or ("%.2f"):format(constant) == query)
-    local userDataCheck = constantType == "userdata" and toString(constant) == query
+    local userDataCheck = constantType == "userdata" and tostring(constant) == query
 
     if constantType == "function" then
-        local closureName = getInfo(constant).name or ''
+        local closureName = debug.getinfo(constant).name or ''
         return query == closureName or closureName:lower():find(query:lower())
     end
 
@@ -29,9 +29,9 @@ end
 local function scan(query)
     local constants = {}
 
-    for _i, closure in pairs(getGc()) do
-        if type(closure) == "function" and not isXClosure(closure) and isLClosure(closure) and not constants[closure] then
-            for index, constant in pairs(getConstants(closure)) do
+    for _i, closure in pairs(getgc()) do
+        if type(closure) == "function" and not isexecutorclosure(closure) and iscclosure(closure) and not constants[closure] then
+            for index, constant in pairs(debug.getconstants(closure)) do
                 if compareConstant(query, constant) then
                     local storage = constants[closure]
 

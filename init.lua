@@ -5,8 +5,8 @@ if oh then
 end
 
 local web = true
-local user = "Upbolt" -- change if you're using a fork
-local branch = "revision"
+local user = "Sino1507" -- change if you're using a fork
+local branch = "master"
 local importCache = {}
 
 local function hasMethods(methods)
@@ -136,9 +136,9 @@ environment.oh = {
         for original, hook in pairs(oh.Hooks) do
             local hookType = type(hook)
             if hookType == "function" then
-                hookFunction(hook, original)
+                hookfunction(hook, original)
             elseif hookType == "table" then
-                hookFunction(hook.Closure.Data, hook.Original)
+                hookfunction(hook.Closure.Data, hook.Original)
             end
         end
 
@@ -156,12 +156,12 @@ environment.oh = {
 }
 
 if getConnections then 
-    for __, connection in pairs(getConnections(game:GetService("ScriptContext").Error)) do
+    for __, connection in pairs(getconnections(game:GetService("ScriptContext").Error)) do
 
         local conn = getrawmetatable(connection)
         local old = conn and conn.__index
         
-        if PROTOSMASHER_LOADED ~= nil then setwriteable(conn) else setReadOnly(conn, false) end
+        if PROTOSMASHER_LOADED ~= nil then setwriteable(conn) else setreadonly(conn, false) end
         
         if old then
             conn.__index = newcclosure(function(t, k)
@@ -173,10 +173,10 @@ if getConnections then
         end
 
         if PROTOSMASHER_LOADED ~= nil then
-            setReadOnly(conn)
+            setreadonly(conn)
             connection:Disconnect()
         else
-            setReadOnly(conn, true)
+            setreadonly(conn, true)
             connection:Disable()
         end
     end
@@ -194,8 +194,8 @@ if readFile and writeFile then
     if not ran or releaseInfo.tag_name ~= result then
         if hasFolderFunctions then
             local function createFolder(path)
-                if not isFolder(path) then
-                    makeFolder(path)
+                if not isfolder(path) then
+                    makefolder(path)
                 end
             end
 
@@ -224,15 +224,15 @@ if readFile and writeFile then
                     local file = (hasFolderFunctions and "hydroxide/user/" .. user .. '/' .. asset .. ".lua") or ("hydroxide-" .. user .. '-' .. asset:gsub('/', '-') .. ".lua")
                     local content
 
-                    if (isFile and not isFile(file)) or not importCache[asset] then
+                    if (isFile and not isfile(file)) or not importCache[asset] then
                         content = game:HttpGetAsync("https://raw.githubusercontent.com/" .. user .. "/Hydroxide/" .. branch .. '/' .. asset .. ".lua")
-                        writeFile(file, content)
+                        writefile(file, content)
                     else
                         local ran, result = pcall(readFile, file)
 
                         if (not ran) or not importCache[asset] then
                             content = game:HttpGetAsync("https://raw.githubusercontent.com/" .. user .. "/Hydroxide/" .. branch .. '/' .. asset .. ".lua")
-                            writeFile(file, content)
+                            writefile(file, content)
                         else
                             content = result
                         end
@@ -243,14 +243,14 @@ if readFile and writeFile then
                     assets = { loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/" .. user .. "/Hydroxide/" .. branch .. '/' .. asset .. ".lua"), asset .. '.lua')() }
                 end
             else
-                assets = { loadstring(readFile("hydroxide/" .. asset .. ".lua"), asset .. '.lua')() }
+                assets = { loadstring(readfile("hydroxide/" .. asset .. ".lua"), asset .. '.lua')() }
             end
 
             importCache[asset] = assets
             return unpack(assets)
         end
 
-        writeFile("__oh_version.txt", releaseInfo.tag_name)
+        writefile("__oh_version.txt", releaseInfo.tag_name)
     elseif ran and releaseInfo.tag_name == result then
         function environment.import(asset)
             if importCache[asset] then
@@ -266,14 +266,14 @@ if readFile and writeFile then
 
                 if not ran then
                     content = game:HttpGetAsync("https://raw.githubusercontent.com/" .. user .. "/Hydroxide/" .. branch .. '/' .. asset .. ".lua")
-                    writeFile(file, content)
+                    writefile(file, content)
                 else
                     content = result
                 end
 
                 assets = { loadstring(content, asset .. '.lua')() }
             else
-                assets = { loadstring(readFile("hydroxide/" .. asset .. ".lua"), asset .. '.lua')() }
+                assets = { loadstring(readfile("hydroxide/" .. asset .. ".lua"), asset .. '.lua')() }
             end
 
             importCache[asset] = assets

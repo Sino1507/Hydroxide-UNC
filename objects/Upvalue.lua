@@ -14,12 +14,12 @@ function Upvalue.new(closure, index, value)
 end
 
 function Upvalue.set(upvalue, value)
-    setUpvalue(upvalue.Closure.Data, upvalue.Index, value)
+    debug.setupvalue(upvalue.Closure.Data, upvalue.Index, value)
     upvalue.Value = value
 end
 
 function Upvalue.update(upvalue, newValue)
-    local value = newValue or getUpvalue(upvalue.Closure.Data, upvalue.Index)
+    local value = newValue or debug.getupvalue(upvalue.Closure.Data, upvalue.Index)
     local scanned = upvalue.Scanned
 
     upvalue.Value = value

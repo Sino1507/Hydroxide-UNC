@@ -49,14 +49,14 @@ local function connectEvent(callback)
 end
 
 local nmcTrampoline
-nmcTrampoline = hookMetaMethod(game, "__namecall", function(...)
+nmcTrampoline = hookmetamethod(game, "__namecall", function(...)
     local instance = ...
     
     if typeof(instance) ~= "Instance" then
         return nmcTrampoline(...)
     end
 
-    local method = getNamecallMethod()
+    local method = getnamecallmethod()
 
     if method == "fireServer" then
         method = "FireServer"
@@ -80,9 +80,9 @@ nmcTrampoline = hookMetaMethod(game, "__namecall", function(...)
 
         if eventSet and (not remoteIgnored and not argsIgnored) then
             local call = {
-                script = getCallingScript((PROTOSMASHER_LOADED ~= nil and 2) or nil),
+                script = getcallingscript((PROTOSMASHER_LOADED ~= nil and 2) or nil),
                 args = vargs,
-                func = getInfo(3).func
+                func = debug.getinfo(3).func
             }
 
             remote.IncrementCalls(remote, call)
@@ -107,7 +107,7 @@ end
 
 for _name, hook in pairs(methodHooks) do
     local originalMethod
-    originalMethod = hookFunction(hook, newCClosure(function(...)
+    originalMethod = hookfunction(hook, newcclosure(function(...)
         local instance = ...
 
         if typeof(instance) ~= "Instance" then
@@ -133,9 +133,9 @@ for _name, hook in pairs(methodHooks) do
             
             if eventSet and (not remoteIgnored and not argsIgnored) then
                 local call = {
-                    script = getCallingScript((PROTOSMASHER_LOADED ~= nil and 2) or nil),
+                    script = getcallingscript((PROTOSMASHER_LOADED ~= nil and 2) or nil),
                     args = vargs,
-                    func = getInfo(3).func
+                    func = debug.getinfo(3).func
                 }
     
                 remote:IncrementCalls(call)

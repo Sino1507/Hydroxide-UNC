@@ -44,20 +44,20 @@ function Hook.new(closure)
     local hook = {}
     local data = closure.Data
 
-    if getInfo(data).nups < 1 then
+    if debug.getinfo(data).nups < 1 then
         return
     elseif hookCache[data] then
         return false
     end
 
     local wrap = { hook, data }
-    hookCache[data] = hookFunction(data, function(...)
+    hookCache[data] = hookfunction(data, function(...)
         local vargs = {...}
         local uHook = wrap[1]
         local uData = wrap[2]
 
         if not uHook.Ignored and not uHook:AreArgsIgnored(vargs) then
-            log(uHook, getCallingScript(), ...)
+            log(uHook, getcallingscript(), ...)
         end
 
         if not uHook.Blocked and not uHook:AreArgsBlocked(vargs) then
